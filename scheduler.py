@@ -9,9 +9,20 @@ logging.basicConfig(
     encoding="utf-8"
 )
 
+
 logger = logging.getLogger(__name__)
 
-flag = False
-while flag == False:
-    logger.info("Я работаю.")
-    sleep(10)
+
+class Worker:
+    def __init__(self):
+        self.is_running = False
+
+    def start(self):
+        self.is_running = True
+        while self.is_running:
+            logger.info("Я работаю.")
+            sleep(10)
+
+
+loop = Worker()
+loop.start()
