@@ -1,4 +1,4 @@
-from time import sleep  
+from time import sleep
 import logging
 
 
@@ -24,5 +24,10 @@ class Worker:
             sleep(10)
 
 
-loop = Worker()
-loop.start()
+def main():
+    loop = Worker()
+    loop.start()
+
+
+if __name__ == "__main__":
+    main()
