@@ -1,6 +1,7 @@
 import httpx
 import logging
 from time import sleep
+from datetime import datetime, timedelta
 import dataclasses as dc
 
 logging.basicConfig(
@@ -34,28 +35,27 @@ class Run:
 
 
 class ApiClient:
-    def __init__(self, url):
-        self.url = url
+    def __init__(self, base_url):
+        self.base_url = base_url
         self.client = httpx.Client()
 
-    def get_runs(self):
+    def get_runs(self, after_date: datetime = None):
         try:
-            logger.info("Запрос данных с API")
-            response = self.client.get(self.url)
+            after_date = after_date or datetime.now() - timedelta(days=1)
+            after_date_str = after_date.isoformat()
+            url = f"{self.base_url}?after={after_date_str}&orderby=updated_at"
+            logger.info(f"Запрос данных с API: {url}")
+            response = self.client.get(url)
             response.raise_for_status()
             data = response.json()
-
-            runs = []
-            for data_run in data:
-                run = Run(
-                    run_id=data_run['run_id'],
-                    job_id=data_run['job_id'],
-                    status=data_run['status'],
-                    start_time=data_run['start_time'],
-                    created_at=data_run['created_at'],
-                    updated_at=data_run['updated_at']
-                )
-                runs.append(run)
+            runs = [Run(
+                run_id=data_run['run_id'],
+                job_id=data_run['job_id'],
+                status=data_run['status'],
+                start_time=data_run['start_time'],
+                created_at=data_run['created_at'],
+                updated_at=data_run['updated_at']
+            ) for data_run in data]
             return runs
         except Exception as e:
             logger.exception("Ошибка при запросе данных с API")
@@ -88,8 +88,8 @@ class Worker:
 
 
 def main():
-    url = "http://localhost:8080/api/v1/srv/runs/?after=2025-03-25T14:50:00.000000+00:00&orderby=updated_at"
-    api_client = ApiClient(url)
+    base_url = "http://localhost:8080/api/v1/srv/runs/"
+    api_client = ApiClient(base_url)
     worker = Worker(api_client)
     worker.start()
 
