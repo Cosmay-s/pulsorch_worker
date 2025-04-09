@@ -1,8 +1,7 @@
-import dataclasses as dc
+from pydantic import BaseModel
 
 
-@dc.dataclass
-class Run:
+class Run(BaseModel):
     run_id: str
     job_id: int
     status: str

@@ -23,19 +23,10 @@ class ApiClient:
             logger.info(f"Запрос данных с API: {self.base_url}")
             response = self.client.get(self.base_url, params=params)
             response.raise_for_status()
-
             data = response.json()
-            runs = [
-                Run(
-                    run_id=data_run['run_id'],
-                    job_id=data_run['job_id'],
-                    status=data_run['status'],
-                    start_time=data_run['start_time'],
-                    created_at=data_run['created_at'],
-                    updated_at=data_run['updated_at']
-                )
-                for data_run in data
-            ]
+            runs = []
+            for data_run in data:
+                runs.append(Run(**data_run))
             return runs
         except Exception as e:
             logger.exception("Ошибка при запросе данных с API")
