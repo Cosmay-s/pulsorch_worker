@@ -1,6 +1,5 @@
 import logging
 from time import sleep
-from client import ApiClient
 
 
 logging.basicConfig(
@@ -36,14 +35,3 @@ class Worker:
             if runs:
                 self.get_new_runs(runs)
             sleep(30)
-
-
-def main():
-    base_url = "http://localhost:8080/api/v1/srv/runs/"
-    api_client = ApiClient(base_url)
-    worker = Worker(api_client)
-    worker.start()
-
-
-if __name__ == "__main__":
-    main()
