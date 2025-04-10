@@ -9,9 +9,7 @@
 
 uv venv
 source .venv/Scripts/activate        # Windows
-# или
 source .venv/bin/activate            # WSL / Git Bash / Linux / macOS
-
 uv pip install
 
 Запуск:
