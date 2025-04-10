@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class ApiClient:
-    def __init__(self, base_url):
+    def __init__(self, base_url: str) -> None:
         self.base_url = base_url
         self.client = httpx.Client(base_url=self.base_url)
 

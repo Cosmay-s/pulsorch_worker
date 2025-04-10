@@ -13,12 +13,12 @@ logger = logging.getLogger(__name__)
 
 
 class ScheduleWorker:
-    def __init__(self, api_client):
-        self.is_running = False
-        self.seen_runs = set()
+    def __init__(self, api_client) -> None:
+        self.is_running: bool = False
+        self.seen_runs: set[int] = set()
         self.api_client = api_client
 
-    def get_new_runs(self, runs):
+    def get_new_runs(self, runs: list) -> None:
         new_run_found = False
         for run in runs:
             if run.run_id not in self.seen_runs:
@@ -28,7 +28,7 @@ class ScheduleWorker:
         if not new_run_found:
             logger.info("Нет новых ранов.")
 
-    def start(self):
+    def start(self) -> None:
         self.is_running = True
         while self.is_running:
             runs = self.api_client.get_runs()
