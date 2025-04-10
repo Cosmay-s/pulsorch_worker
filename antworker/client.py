@@ -1,18 +1,15 @@
 import httpx
 from datetime import datetime, timedelta
-from schemas import Run
+from antworker.schemas import Run
 import logging
-import os
-from dotenv import load_dotenv
 
 
 logger = logging.getLogger(__name__)
-load_dotenv()
 
 
 class ApiClient:
-    def __init__(self):
-        self.base_url = os.getenv("BASE_URL")
+    def __init__(self, base_url):
+        self.base_url = base_url
         self.client = httpx.Client(base_url=self.base_url)
 
     def get_runs(self, after_date: datetime = None) -> list[Run]:
