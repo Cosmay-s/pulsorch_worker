@@ -12,7 +12,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class Worker:
+class ScheduleWorker:
     def __init__(self, api_client):
         self.is_running = False
         self.seen_runs = set()
