@@ -1,5 +1,7 @@
 import logging
 from time import sleep
+from antworker.client import ApiClient
+from antworker.schemas import Run
 
 
 logging.basicConfig(
@@ -13,12 +15,12 @@ logger = logging.getLogger(__name__)
 
 
 class ScheduleWorker:
-    def __init__(self, api_client) -> None:
-        self.is_running: bool = False
+    def __init__(self, api_client: ApiClient) -> None:
+        self.is_running = False
         self.seen_runs: set[int] = set()
         self.api_client = api_client
 
-    def get_new_runs(self, runs: list) -> None:
+    def get_new_runs(self, runs: list[Run]) -> None:
         new_run_found = False
         for run in runs:
             if run.run_id not in self.seen_runs:
