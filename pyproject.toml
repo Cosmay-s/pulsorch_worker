@@ -7,3 +7,11 @@ dependencies = [
     "pydantic",
     "python-dotenv"
 ]
+
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "ruff",
+    "flake8",
+    "pytest"
+]
