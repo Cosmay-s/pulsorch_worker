@@ -22,8 +22,8 @@ class TriggerWorker:
                 logger.info(f"Новый task:\n{task}")
                 self.seen_scheduled.add(task.scheduled_id)
                 new_task_found = True
-            if not new_task_found:
-                logger.info("Нет новых tasks.")
+        if not new_task_found:
+            logger.info("Нет новых tasks.")
 
     def start(self) -> None:
         self.is_running = True
