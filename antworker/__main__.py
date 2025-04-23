@@ -4,7 +4,6 @@ from antworker.triggerier import TriggerWorker
 import logging
 import os
 from dotenv import load_dotenv
-import threading
 
 
 logger = logging.getLogger(__name__)
@@ -17,12 +16,8 @@ def main() -> None:
     api_client = ApiClient(base_url)
     scheduler = ScheduleWorker(api_client)
     triggerier = TriggerWorker(api_client) 
-    scheduler_thread = threading.Thread(target=scheduler.start)
-    triggerer_thread = threading.Thread(target=triggerier.start)
-    scheduler_thread.start()
-    triggerer_thread.start()
-    scheduler_thread.join()
-    triggerer_thread.join()
+    scheduler.start()
+    triggerier.start()
     logging.info("Worker has stopped.")
 
 
