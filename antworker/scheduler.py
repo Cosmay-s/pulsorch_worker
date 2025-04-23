@@ -36,4 +36,4 @@ class ScheduleWorker:
             runs = self.api_client.get_runs()
             if runs:
                 self.get_new_runs(runs)
-            sleep(30)
+            sleep(15)
