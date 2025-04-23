@@ -1,17 +1,12 @@
 import logging
 from time import sleep
-from antworker.client import ApiClient
-from antworker.schemas import ScheduledTask
-
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    encoding="utf-8"
-)
+from client import ApiClient
+from schemas import ScheduledTask
+import os
+from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
+load_dotenv()
 
 
 class TriggerWorker:
@@ -37,3 +32,16 @@ class TriggerWorker:
             if tasks:
                 self.get_new_scheduled_tasks(tasks)
             sleep(15)
+
+
+def main() -> None:
+    logging.info("Starting worker...")
+    base_url = os.getenv("BASE_URL")
+    api_client = ApiClient(base_url)
+    triggerier = TriggerWorker(api_client)
+    triggerier.start()
+    logging.info("Worker has stopped.")
+
+
+if __name__ == "__main__":
+    main()
