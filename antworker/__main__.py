@@ -14,10 +14,10 @@ def main() -> None:
     logging.info("Starting worker...")
     base_url = os.getenv("BASE_URL")
     api_client = ApiClient(base_url)
-    scheduler = ScheduleWorker(api_client)
-    triggerier = TriggerWorker(api_client) 
-    scheduler.start()
-    triggerier.start()
+    # scheduler = ScheduleWorker(api_client)
+    # triggerier = TriggerWorker(api_client) 
+    # scheduler.start()
+    # triggerier.start()
     logging.info("Worker has stopped.")
 
 
