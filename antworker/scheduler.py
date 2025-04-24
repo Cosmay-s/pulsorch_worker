@@ -1,17 +1,12 @@
 import logging
 from time import sleep
-from antworker.client import ApiClient
-from antworker.schemas import Run
-
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    encoding="utf-8"
-)
+from client import ApiClient
+from schemas import Run
+import os
+from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
+load_dotenv()
 
 
 class ScheduleWorker:
@@ -36,4 +31,17 @@ class ScheduleWorker:
             runs = self.api_client.get_runs()
             if runs:
                 self.get_new_runs(runs)
-            sleep(30)
+            sleep(15)
+
+
+def main() -> None:
+    logging.info("Starting worker...")
+    base_url = os.getenv("BASE_URL")
+    api_client = ApiClient(base_url)
+    scheduler = ScheduleWorker(api_client)
+    scheduler.start()
+    logging.info("Worker has stopped.")
+
+
+if __name__ == "__main__":
+    main()

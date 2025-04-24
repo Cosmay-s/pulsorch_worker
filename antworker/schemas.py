@@ -1,11 +1,17 @@
 from pydantic import BaseModel
-from enum import Enum as PyEnum
+import enum
 
 
-class RunStatus(PyEnum):
-    created = "created"
-    scheduled = "scheduled"
-    triggered = "triggered"
+class RunStatus(enum.Enum):
+    CREATED = "created"
+    SCHEDULED = "scheduled"
+    TRIGGERED = "triggered"
+
+
+class ScheduledStatus(enum.Enum):
+    SCHEDULED = "scheduled"
+    TRIGGERED = "triggered"
+    CANCELLED = "cancelled"
 
 
 class Run(BaseModel):
@@ -16,3 +22,10 @@ class Run(BaseModel):
     created_at: str | None
     updated_at: str | None
     status: RunStatus
+
+
+class ScheduledTask(BaseModel):
+    scheduled_id: int
+    job_id: int
+    scheduled_at: str
+    status: ScheduledStatus
