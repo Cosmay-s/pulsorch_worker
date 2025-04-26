@@ -17,14 +17,10 @@ class TriggerWorker:
 
     def get_task_job(self, job_id: int):
         job = self.api_client.get_task_job(job_id)
-        print("Job: ")
-        print(job)
         return job
 
     def get_task_system(self, system_id: int):
         system = self.api_client.get_task_system(system_id)
-        print("System:")
-        print(system)
         return system
 
     def get_new_scheduled_tasks(self, tasks: list[ScheduledTask]) -> None:
@@ -35,6 +31,7 @@ class TriggerWorker:
                 self.seen_scheduled.add(task.scheduled_id)
                 job = self.get_task_job(task.job_id)
                 system = self.get_task_system(job.system_id)
+                logger.info("FAKE REQUEST: %s %s", system.url, job.code)
                 new_task_found = True
         if not new_task_found:
             logger.info("Нет новых tasks.")
