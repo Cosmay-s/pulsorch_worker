@@ -27,11 +27,14 @@ class ScheduleWorker:
 
     def start(self) -> None:
         self.is_running = True
-        while self.is_running:
-            runs = self.api_client.get_runs()
-            if runs:
-                self.get_new_runs(runs)
-            sleep(15)
+        try:
+            while self.is_running:
+                runs = self.api_client.get_runs()
+                if runs:
+                    self.get_new_runs(runs)
+                sleep(15)
+        except KeyboardInterrupt:
+            logger.info("Шедулер остановлен")
 
 
 def main() -> None:

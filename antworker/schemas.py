@@ -29,3 +29,22 @@ class ScheduledTask(BaseModel):
     job_id: int
     scheduled_at: str
     status: ScheduledStatus
+
+
+class Job(BaseModel):
+    job_id: int
+    system_id: int
+    code: str
+    scheduler: str
+    created_at: str
+    updated_at: str
+
+
+class System(BaseModel):
+    system_id: int
+    code: str
+    url: str
+    token: str
+    system_type: str
+    created_at: str
+    updated_at: str
