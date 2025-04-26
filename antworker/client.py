@@ -1,6 +1,6 @@
 import httpx
 from datetime import datetime, timedelta
-from schemas import Run, ScheduledTask
+from schemas import Run, ScheduledTask, Job, System
 import logging
 
 
@@ -48,3 +48,17 @@ class ApiClient:
         except Exception as e:
             logger.exception("Ошибка при запросе данных")
             return {"error": str(e)}, 500
+
+    def get_task_job(self, job_id: int) -> Job:
+        api_path = f"/api/v1/admin/jobs/{job_id}"
+        response = self.client.get(api_path)
+        response.raise_for_status()
+        job = response.json()
+        return Job(**job)
+
+    def get_task_system(self, system_id: int) -> System:
+        api_path = f"/api/v1/admin/systems/{system_id}"
+        response = self.client.get(api_path)
+        response.raise_for_status()
+        system = response.json()
+        return System(**system)

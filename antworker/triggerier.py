@@ -1,7 +1,7 @@
 import logging
 from time import sleep
 from client import ApiClient
-from schemas import ScheduledTask
+from schemas import ScheduledTask, Job, System
 import os
 from dotenv import load_dotenv
 
@@ -15,12 +15,26 @@ class TriggerWorker:
         self.seen_scheduled: set[int] = set()
         self.api_client = api_client
 
+    def get_task_job(self, job_id: int):
+        job = self.api_client.get_task_job(job_id)
+        print("Job")
+        print(job)
+        return job
+
+    def get_task_system(self, system_id: int):
+        system = self.api_client.get_task_system(system_id)
+        print("System")
+        print(system)
+        return system
+
     def get_new_scheduled_tasks(self, tasks: list[ScheduledTask]) -> None:
         new_task_found = False
         for task in tasks:
             if task.scheduled_id not in self.seen_scheduled:
                 logger.info(f"Новый task:\n{task}")
                 self.seen_scheduled.add(task.scheduled_id)
+                job = self.get_task_job(task.job_id)
+                system = self.get_task_system(job.system_id)
                 new_task_found = True
         if not new_task_found:
             logger.info("Нет новых tasks.")
