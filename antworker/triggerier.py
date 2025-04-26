@@ -17,13 +17,13 @@ class TriggerWorker:
 
     def get_task_job(self, job_id: int):
         job = self.api_client.get_task_job(job_id)
-        print("Job")
+        print("Job: ")
         print(job)
         return job
 
     def get_task_system(self, system_id: int):
         system = self.api_client.get_task_system(system_id)
-        print("System")
+        print("System:")
         print(system)
         return system
 
@@ -41,11 +41,14 @@ class TriggerWorker:
 
     def start(self) -> None:
         self.is_running = True
-        while self.is_running:
-            tasks = self.api_client.get_scheduled_tasks()
-            if tasks:
-                self.get_new_scheduled_tasks(tasks)
-            sleep(15)
+        try:
+            while self.is_running:
+                tasks = self.api_client.get_scheduled_tasks()
+                if tasks:
+                    self.get_new_scheduled_tasks(tasks)
+                sleep(15)
+        except KeyboardInterrupt:
+            logger.info("Триггерер остановлен")
 
 
 def main() -> None:
