@@ -29,6 +29,7 @@ class TriggerWorker:
             if task.scheduled_id not in self.seen_scheduled:
                 logger.info(f"Новый task:\n{task}")
                 self.seen_scheduled.add(task.scheduled_id)
+                self.api_client.update_task_status(task.scheduled_id)
                 job = self.get_task_job(task.job_id)
                 system = self.get_task_system(job.system_id)
                 logger.info("FAKE REQUEST: %s %s", system.url, job.code)
