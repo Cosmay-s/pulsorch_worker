@@ -62,3 +62,10 @@ class ApiClient:
         response.raise_for_status()
         system = response.json()
         return System(**system)
+
+    def update_task_status(self, task_id: int):
+        api_path = f"/api/v1/admin/scheduleds/{task_id}/triggered"
+        response = self.client.post(api_path)
+        response.raise_for_status()
+        logger.info("Task status update")
+        return {}, 204
