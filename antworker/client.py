@@ -1,6 +1,6 @@
 import httpx
 from datetime import datetime, timedelta
-from schemas import Run, ScheduledTask, Job, System
+from antworker.schemas import Run, ScheduledTask, Job, System
 import logging
 
 
@@ -33,9 +33,9 @@ class ApiClient:
             response.raise_for_status()
             data = response.json()
             return [Run(**run) for run in data]
-        except Exception as e:
+        except Exception:
             logger.exception("Ошибка при запросе данных")
-            return {"error": str(e)}, 500
+            raise
 
     def get_scheduled_tasks(self) -> list[ScheduledTask]:
         try:
@@ -45,9 +45,9 @@ class ApiClient:
             response.raise_for_status()
             data = response.json()
             return [ScheduledTask(**task) for task in data]
-        except Exception as e:
+        except Exception:
             logger.exception("Ошибка при запросе данных")
-            return {"error": str(e)}, 500
+            raise
 
     def get_task_job(self, job_id: int) -> Job:
         api_path = f"/api/v1/admin/jobs/{job_id}"
