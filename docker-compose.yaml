@@ -1,0 +1,20 @@
+services:
+
+  scheduler:
+    build: .
+    env_file: .env
+    networks:
+      - anthil_antworker
+    command: python -m antworker.scheduler
+
+
+  triggerier:
+    build: .
+    env_file: .env
+    networks:
+      - anthil_antworker
+    command: python -m antworker.triggerier
+
+networks:
+  anthil_antworker: 
+    external: true
