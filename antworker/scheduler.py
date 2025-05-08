@@ -12,26 +12,26 @@ load_dotenv()
 class ScheduleWorker:
     def __init__(self, api_client: ApiClient) -> None:
         self.is_running = False
-        self.seen_runs: set[int] = set()
         self.api_client = api_client
 
-    def get_new_runs(self, runs: list[Run]) -> None:
-        new_run_found = False
+    def handle_runs(self, runs: list[Run]) -> None:
+        if not runs:
+            logger.debug("нет новых ранов")
+
         for run in runs:
-            if run.run_id not in self.seen_runs:
-                logger.info(f"Новый run:\n{run}")
-                self.seen_runs.add(run.run_id)
-                new_run_found = True
-        if not new_run_found:
-            logger.info("Нет новых ранов.")
+            logger.info("новый run: %s job: %s", run.run_id, run.job_id)
+
+            jobs = self.api_client.compute_scheduled_task(run.run_id)
+            for job in jobs:
+                self.api_client.create_scheduled_task(job.job_id)
 
     def start(self) -> None:
         self.is_running = True
         try:
             while self.is_running:
-                runs = self.api_client.get_runs()
+                runs = self.api_client.acquire_runs()
                 if runs:
-                    self.get_new_runs(runs)
+                    self.handle_runs(runs)
                 sleep(15)
         except KeyboardInterrupt:
             logger.info("Шедулер остановлен")
