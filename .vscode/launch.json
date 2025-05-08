@@ -11,6 +11,13 @@
             "request": "launch",
             "module": "antworker.triggerier",
             "console": "internalConsole"
+        },
+        {
+            "name": "scheduler",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "antworker.scheduler",
+            "console": "internalConsole"
         }
     ]
 }

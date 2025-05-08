@@ -19,34 +19,49 @@ class ApiClient:
         self.base_url = base_url
         self.client = httpx.Client(base_url=self.base_url)
 
-    def get_runs(self, after_date: datetime = None) -> list[Run]:
+    def acquire_runs(self) -> list[Run]:
         try:
-            api_path = "/api/v1/srv/runs/"
-            after_date = after_date or datetime.now() - timedelta(days=1)
-            after_date_str = after_date.isoformat()
-            params = {
-                'after': after_date_str,
-                'orderby': 'updated_at'
-            }
-            logger.info(f"Запрос данных: {self.base_url}")
-            response = self.client.get(api_path, params=params)
+            logger.debug("запрос runs: %s", self.base_url)
+            response = self.client.post("/api/v1/srv/runs/acquire", json={})
             response.raise_for_status()
             data = response.json()
             return [Run(**run) for run in data]
         except Exception:
-            logger.exception("Ошибка при запросе данных")
+            logger.exception("не удалось получить runs")
+            raise
+
+    def compute_scheduled_task(self, run_id: str) -> list[Job]:
+        try:
+            response = self.client.post(f"/api/v1/srv/runs/{run_id}/schedule",
+                                        json={})
+            response.raise_for_status()
+            data = response.json()
+            return [Job(**job) for job in data]
+        except Exception:
+            raise
+
+    def create_scheduled_task(self, job_id: int) -> ScheduledTask:
+        try:
+            logger.debug("создать scheduled task")
+            response = self.client.post("/api/v1/admin/scheduleds/",
+                                        json={"job_id": job_id})
+            response.raise_for_status()
+            data = response.json()
+            return ScheduledTask(**data)
+        except Exception:
+            logger.exception("не удалось создать scheduled task")
             raise
 
     def get_scheduled_tasks(self) -> list[ScheduledTask]:
         try:
             api_path = "/api/v1/admin/scheduleds/"
-            logger.info(f"Запрос данных: {self.base_url}")
+            logger.debug("запрос scheduled tasks: %s", self.base_url)
             response = self.client.get(api_path)
             response.raise_for_status()
             data = response.json()
             return [ScheduledTask(**task) for task in data]
         except Exception:
-            logger.exception("Ошибка при запросе данных")
+            logger.exception("не удалось получить scheduled tasks")
             raise
 
     def get_task_job(self, job_id: int) -> Job:
@@ -69,3 +84,5 @@ class ApiClient:
         response.raise_for_status()
         logger.info("Task status update")
         return {}, 204
+    
+
