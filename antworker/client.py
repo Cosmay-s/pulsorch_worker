@@ -1,5 +1,4 @@
 import httpx
-from datetime import datetime, timedelta
 from antworker.schemas import Run, ScheduledTask, Job, System
 import logging
 
@@ -30,14 +29,16 @@ class ApiClient:
             logger.exception("не удалось получить runs")
             raise
 
-    def compute_scheduled_task(self, run_id: str) -> list[Job]:
+    def compute_scheduled_task(self, run_id: str) -> list[int]:
         try:
+            logger.debug("ищем готовые run: %s", run_id)
             response = self.client.post(f"/api/v1/srv/runs/{run_id}/schedule",
                                         json={})
             response.raise_for_status()
             data = response.json()
-            return [Job(**job) for job in data]
+            return data.get("job_ids", [])
         except Exception:
+            logger.exception("не удалось ")
             raise
 
     def create_scheduled_task(self, job_id: int) -> ScheduledTask:
@@ -84,5 +85,3 @@ class ApiClient:
         response.raise_for_status()
         logger.info("Task status update")
         return {}, 204
-    
-
