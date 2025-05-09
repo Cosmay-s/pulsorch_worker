@@ -30,13 +30,14 @@ class ApiClient:
             logger.exception("не удалось получить runs")
             raise
 
-    def compute_scheduled_task(self, run_id: str) -> list[Job]:
+    def compute_scheduled_task(self, run_id: str) -> list[int]:
         try:
             response = self.client.post(f"/api/v1/srv/runs/{run_id}/schedule",
                                         json={})
             response.raise_for_status()
             data = response.json()
-            return [Job(**job) for job in data]
+            logger.debug(data)
+            return data.get("job_ids", [])
         except Exception:
             raise
 

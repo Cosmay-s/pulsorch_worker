@@ -21,9 +21,9 @@ class ScheduleWorker:
         for run in runs:
             logger.info("новый run: %s job: %s", run.run_id, run.job_id)
 
-            jobs = self.api_client.compute_scheduled_task(run.run_id)
-            for job in jobs:
-                self.api_client.create_scheduled_task(job.job_id)
+            job_ids = self.api_client.compute_scheduled_task(run.run_id)
+            for job_id in job_ids:
+                self.api_client.create_scheduled_task(job_id)
 
     def start(self) -> None:
         self.is_running = True
