@@ -1,5 +1,5 @@
 import httpx
-from antworker.schemas import Run, ScheduledTask, Job, System
+from worker.schemas import Run, ScheduledTask, Job, System
 import logging
 
 

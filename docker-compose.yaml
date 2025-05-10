@@ -4,17 +4,17 @@ services:
     build: .
     env_file: .env
     networks:
-      - anthil_antworker
-    command: python -m antworker.scheduler
+      - pulsorch_worker
+    command: python -m worker.scheduler
 
 
   triggerier:
     build: .
     env_file: .env
     networks:
-      - anthil_antworker
-    command: python -m antworker.triggerier
+      - pulsorch_worker
+    command: python -m worker.triggerier
 
 networks:
-  anthil_antworker: 
+  pulsorch_worker: 
     external: true

@@ -1,7 +1,7 @@
 import logging
 from time import sleep
-from antworker.client import ApiClient
-from antworker.schemas import ScheduledTask
+from worker.client import ApiClient
+from worker.schemas import ScheduledTask
 import os
 from dotenv import load_dotenv
 
