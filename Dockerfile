@@ -9,6 +9,6 @@ RUN pip install uv==0.7.2 \
  && pip install -r requirements.txt --no-cache-dir -U \
  && pip uninstall -y uv
 
-COPY antworker /app/antworker
+COPY worker /app/worker
 
-CMD ["python", "-m", "antworker.scheduler"]
+CMD ["python", "-m", "worker.scheduler"]

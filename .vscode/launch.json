@@ -5,18 +5,19 @@
     "version": "0.2.0",
     "configurations": [
 
+
         {
             "name": "triggerier",
             "type": "debugpy",
             "request": "launch",
-            "module": "antworker.triggerier",
+            "module": "worker.triggerier",
             "console": "internalConsole"
         },
         {
             "name": "scheduler",
             "type": "debugpy",
             "request": "launch",
-            "module": "antworker.scheduler",
+            "module": "worker.scheduler",
             "console": "internalConsole"
         }
     ]
